@@ -1,0 +1,6 @@
+#!dopy
+
+def do_echo(*args):
+    """echo [args] - Echo the args you give it"""
+    print("Echo: %s" % " ".join(args))
+

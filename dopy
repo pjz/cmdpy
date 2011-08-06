@@ -1,0 +1,86 @@
+#!/usr/bin/python
+
+import sys
+
+class UsageError(Exception):
+    pass
+
+class dofile_client(object):
+
+    def __init__(self, dofilename):
+        try:
+            import imp
+            dofile = imp.load_source('dofile', dofilename)
+        except Exception as e:
+            print("Error importing dofile: %s" % e)
+            sys.exit(1)
+        self.dofile = dofile
+        self.cmdprefix = getattr(dofile, 'command_prefix', 'do_')
+        cp = self.cmdprefix
+        cmdlist = [ c[len(cp):] for c in dir(dofile) if c.startswith(cp) ]
+
+        if "help" not in cmdlist: 
+            setattr(dofile, cp + "help", self.do_help)
+            cmdlist += [ "help" ]
+
+        cmdlist.sort()
+        self.commands = cmdlist
+
+    def execute(self, args):
+        try:
+            self.dispatch(args)
+        except KeyboardInterrupt:
+            print("Interrupted.")
+
+    def dispatch(self, args):
+
+        commands = ", ".join(self.commands)
+
+        if not args:
+            print("No command specified.  Try one of: %s." % commands)
+            return
+ 
+        cmd = args[0].strip()
+        cmdargs = args[1:]
+        cmdfunc = getattr(self.dofile, self.cmdprefix + cmd, None)
+
+        if cmdfunc is None:
+            print("Unknown command '%s'.  Try one of: %s." % (cmd, commands))
+            return
+
+        try:
+            cmdfunc(*cmdargs)
+        except UsageError:
+            print(cmdfunc.__doc__)
+            sys.exit(1)
+
+    def do_help(self, *args):
+        """help [cmd] - show either all the help or that of the specified command"""
+
+        def _help_for(cmd):
+            doc = getattr(self.dofile, self.cmdprefix + cmd).__doc__
+            if not doc:
+                doc = cmd
+            return doc.strip()
+
+        if not args:
+            print("Commands:\n--------")
+            for cmd in self.commands:
+                print _help_for(cmd)
+                if self.commands[-1] != cmd:
+                    print
+        elif args[0] in self.commands:
+            print _help_for(args[0])
+        else:
+            print("Unknown Command '%s'.  try one of: %s." % (args[0], ', '.join(self.commands)))
+
+if __name__=='__main__':
+    args = sys.argv
+    if len(args) < 1:
+        print("Usage:\ndopy <dofile>      - list all the commands in dofile")
+        sys.exit(1)
+    dofilename = args[1]
+    dofileargs = args[2:]
+    dofile = dofile_client(dofilename)
+    dofile.execute(dofileargs)
+
