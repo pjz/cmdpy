@@ -2,6 +2,15 @@
 
 import sys
 
+
+def debug_noop(*args, **kwargs):
+    pass
+
+def debug_real(func):
+    print "DEBUG: ", func()
+
+debug = debug_noop
+
 class UsageError(Exception):
     pass
 
@@ -23,16 +32,33 @@ class dofile_client(object):
             setattr(dofile, cp + "help", self.do_help)
             cmdlist += [ "help" ]
 
+        if "dopy_debug" not in cmdlist: 
+            setattr(dofile, cp + "dopy_debug", self.do_dopy_debug)
+            # cmdlist += [ "dopy_debug" ] 
+
         cmdlist.sort()
         self.commands = cmdlist
 
-    def execute(self, args):
+    def execute(self, rargs):
+
+        kw = {}
+        for a in rargs:
+            if a.startswith('--'):
+                if '=' in a:
+                     k, v = a[2:].split('=')
+                else:
+                     k = a[2:]
+                     v = True
+                kw[k] = v
+
+        args = [ x for x in rargs if not x.startswith('--') ]
+ 
         try:
-            self.dispatch(args)
+            self.dispatch(args, **kw)
         except KeyboardInterrupt:
             print("Interrupted.")
 
-    def dispatch(self, args):
+    def dispatch(self, args, **kwargs):
 
         commands = ", ".join(self.commands)
 
@@ -48,13 +74,15 @@ class dofile_client(object):
             print("Unknown command '%s'.  Try one of: %s." % (cmd, commands))
             return
 
+        debug(lambda : "calling %s with args %s and kwargs %s" % (cmdfunc, cmdargs, kwargs))
+
         try:
-            cmdfunc(*cmdargs)
+            cmdfunc(cmdargs, **kwargs)
         except UsageError:
             print(cmdfunc.__doc__)
             sys.exit(1)
 
-    def do_help(self, *args):
+    def do_help(self, *args, **kwargs):
         """help [cmd] - show either all the help or that of the specified command"""
 
         def _help_for(cmd):
@@ -73,6 +101,12 @@ class dofile_client(object):
             print _help_for(args[0])
         else:
             print("Unknown Command '%s'.  try one of: %s." % (args[0], ', '.join(self.commands)))
+
+    def do_dopy_debug(self, args, **kwargs):
+        global debug
+        debug = debug_real
+        self.dispatch(args, **kwargs)
+
 
 if __name__=='__main__':
     args = sys.argv

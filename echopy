@@ -1,6 +1,10 @@
 #!dopy
 
-def do_echo(*args):
-    """echo [args] - Echo the args you give it"""
-    print("Echo: %s" % " ".join(args))
+def do_echo(args, prefix="Echo: "):
+    """echo [args]  - Echo the args you give it
+    --prefix=Echo   - set the echo prefix. Default: "Echo: "
+    """
+    print(prefix + " ".join(args))
+
+
 
