@@ -82,7 +82,7 @@ class dofile_client(object):
             print(cmdfunc.__doc__)
             sys.exit(1)
 
-    def do_help(self, *args, **kwargs):
+    def do_help(self, args, **kwargs):
         """help [cmd] - show either all the help or that of the specified command"""
 
         def _help_for(cmd):

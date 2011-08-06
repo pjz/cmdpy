@@ -9,6 +9,11 @@ or as a #! line in a python script (mycmdpy above)
 
 By default it thinks that all attributes that start with 'do_' are commands you want exposed.  The 'command prefix' is settable by setting a top-level variable named 'command_prefix' to whatever you want.
 
+right now 'echopy' is the example program
+
 TODO:
 
-   right now 
+  * better example
+  * some tests would be good
+  * figure out how to delete mycmdpypyc that imp creates
+

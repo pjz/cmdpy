@@ -1,5 +1,11 @@
 #!dopy
 
+def ignored_func():
+    """this function is ignored by dopy because it doesn't start
+       with the default command prefix of 'do_'
+    """
+
+
 def do_echo(args, prefix="Echo: "):
     """echo [args]  - Echo the args you give it
     --prefix=Echo   - set the echo prefix. Default: "Echo: "
