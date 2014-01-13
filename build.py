@@ -75,8 +75,30 @@ def clean_build():
     shell(main.options.python, 'setup.py', 'clean', '-a')
     shell('rm', '-rf', 'dist')
 
+def _require_y(prompt, failmsg=''):
+    yn = raw_input(prompt).lower()
+    if yn not in [ 'y', 'yes' ]:
+        print failmsg
+        sys.exit(1)
+
+
 def release():
-    run()
+    if main.options.release is None:
+        print("Must specify a version to release with --release <version>")
+        sys.exit(1)
+
+    rel = main.options.release
+    _require_y("Release version %s ?" % rel)
+
+    open("version.txt", "w").write(rel)
+    run(main.options.python, 'setup.py', 'sdist', '--formats=zip,gztar,bztar', 'upload')
+    run(main.options.python, 'setup.py', 'bdist_wheel', 'upload')
+    shell('git', 'commit', 'version.txt', '-m', '"Release %s"' % rel) 
+    shell('git', 'tag', rel)
+    open("version.txt", "a").write('-dev')
+    shell('git', 'commit', 'version.txt', '-m', '"Bump to %s-dev"' % rel) 
+    shell('git', 'push', '--tags', 'master')
+    clean_build()
 
 def show_targets():
     print("""Valid targets:
@@ -89,6 +111,7 @@ def show_targets():
     analyse - run the unit tests with code coverage enabled
     clean - remove all build artifacts
     clean_{dev,test} - clean some build artifacts
+    release - requres --version and pypi upload rights
 
     """)
     sys.exit()
