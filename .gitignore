@@ -1,0 +1,8 @@
+/.deps
+*.pyc
+/env
+/build/
+/dist/
+/downloads/
+*.egg-info/
+/distribute-*

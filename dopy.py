@@ -2,7 +2,6 @@
 
 import sys
 
-
 def debug_noop(*args, **kwargs):
     pass
 
@@ -19,6 +18,7 @@ class dofile_client(object):
 
         In that module:
            command_prefix defines which methods will be paid attention to.  default: 'do_'
+               If a command method raises SyntaxError, the help for that func will be shown.
            functions whose names start with the command_prefix will be turned into
                commandline subcommands.  They must take at least a single argument that's the
                rest of the arguments on the commandline. They MAY take keyword arguments,
@@ -26,13 +26,18 @@ class dofile_client(object):
         
     """
 
-    def __init__(self, dofilename):
-        try:
+    def __init__(self, dofilename=None, domodule=None):
+        if dofilename is not None:
             import imp
             dofile = imp.load_source('dofile', dofilename)
-        except Exception as e:
-            print("Error importing dofile: %s" % e)
-            sys.exit(1)
+        elif domodule is not None:
+            import imp
+            details = imp.find_module(domodule)
+            dofile = imp.load_module(domodule, *details)
+        else:
+            print("Must specify a file or module!")
+            raise ImportError
+
         self.dofile = dofile
         self.cmdprefix = getattr(dofile, 'command_prefix', 'do_')
         cp = self.cmdprefix
