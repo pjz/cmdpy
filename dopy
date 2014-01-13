@@ -11,10 +11,20 @@ def debug_real(func):
 
 debug = debug_noop
 
-class UsageError(Exception):
-    pass
+UsageError = SyntaxError
 
 class dofile_client(object):
+    """
+        A wrapper class to turn a module with some functions into a commandline program.
+
+        In that module:
+           command_prefix defines which methods will be paid attention to.  default: 'do_'
+           functions whose names start with the command_prefix will be turned into
+               commandline subcommands.  They must take at least a single argument that's the
+               rest of the arguments on the commandline. They MAY take keyword arguments,
+               which are translated from arguments specified with a '--' prefix.
+        
+    """
 
     def __init__(self, dofilename):
         try:
