@@ -31,7 +31,7 @@ def dev():
     run(*args)
 
     for dep in RUN_DEPS + TEST_DEPS:
-        run(_virt('pip'), 'install', '--no-use-wheel', dep)
+        run(_virt('pip'), 'install', dep)
     run(_virt('python'), 'setup.py', 'develop')
 
 def clean_dev():
@@ -70,7 +70,7 @@ def clean_test():
 # =====
 
 def build():
-    run(main.options.python, 'setup.py', 'bdist_egg')
+    run(main.options.python, 'setup.py', 'bdist_egg', 'bdist_wheel')
 
 def clean_build():
     shell(main.options.python, 'setup.py', 'clean', '-a')
@@ -99,7 +99,7 @@ def release():
 
     open("version.txt", "w").write(rel)
     run(main.options.python, 'setup.py', 'sdist', '--formats=zip,gztar,bztar', 'upload')
-    #run(main.options.python, 'setup.py', 'bdist_wheel', 'upload')
+    run(main.options.python, 'setup.py', 'bdist_wheel', 'upload')
     shell('git', 'commit', 'version.txt', '-m', 'Release %s' % rel, silent=False) 
     shell('git', 'tag', rel, silent=False)
     open("version.txt", "a").write('-dev')
