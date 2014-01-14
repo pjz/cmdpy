@@ -24,6 +24,7 @@ setup( author = 'Paul Jimenez'
      , description = 'Cmdpy is a library to take the rote scutwork out of writing commandline tools in python'
      , name = 'cmdpy'
      , py_modules = [ 'distribute_setup', 'cmdpy' ]
+     , data_files=[('', ['version.txt'])]
      , url = 'http://github.com/pjz/cmdpy'
      , version = version
      , zip_safe = False
