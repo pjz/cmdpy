@@ -7,7 +7,7 @@ from fabricate import main, run, shell, autoclean
 # Core Executables
 # ================
 
-name = 'dopy'
+name = 'cmdpy'
 
 RUN_DEPS = [ ]
 

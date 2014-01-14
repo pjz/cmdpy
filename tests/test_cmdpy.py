@@ -1,5 +1,5 @@
 import sys
-from dopy import dofile_client
+from cmdpy import cmdfile_client
 
 def test_module(tmpdir):
 
@@ -8,12 +8,12 @@ def test_module(tmpdir):
     mod.write('''
 
 def ignored_func():
-    """this function is ignored by dopy because it doesn't start
-       with the default command prefix of 'do_'
+    """this function is ignored by cmdpy because it doesn't start
+       with the default command prefix of 'cmd_'
     """
     pass
 
-def do_echo(args, prefix="Echo: "):
+def cmd_echo(args, prefix="Echo: "):
     """echo [args]  - Echo the args you give it
     --prefix=Echo   - set the echo prefix. Default: "Echo: "
     """
@@ -22,7 +22,7 @@ def do_echo(args, prefix="Echo: "):
 ''')
     sys.path += [ str(tmpdir) ]
     print "sys.path is %r" % sys.path
-    df = dofile_client(domodule=modname)
+    df = cmdfile_client(cmdmodule=modname)
     assert 'echo' in df.commands
     sys.path.remove(str(tmpdir))
 

@@ -1,13 +1,13 @@
 
-The idea behind 'dopy' is to make it easy to make multi-command scripts by abstracting out all the dispatch machinery and commandline parsing.
+The idea behind 'cmdpy' is to make it easy to make multi-command scripts by abstracting out all the dispatch machinery and commandline parsing.
 
-dopy can be used either from the commandline:
+cmdpy can be used either from the commandline:
 
-  dopy mycmdpy command 
+  cmdpy mycmdpy command 
 
 or as a #! line in a python script (mycmdpy above)
 
-By default it thinks that all attributes that start with 'do_' are commands you want exposed.  The 'command prefix' is settable by setting a top-level variable named 'command_prefix' to whatever you want.
+By default it thinks that all attributes that start with 'cmd_' are commands you want exposed.  The 'command prefix' is settable by setting a top-level variable named 'command_prefix' to whatever you want.
 
 right now 'echopy' is the example program
 

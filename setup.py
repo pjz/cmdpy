@@ -21,11 +21,11 @@ classifiers = [ 'Development Status :: 4 - Beta'
 setup( author = 'Paul Jimenez'
      , author_email = 'pj@place.org'
      , classifiers = classifiers
-     , description = 'Dopy is a library to take the pain out of writing commandline tools'
-     , name = 'dopy'
-     , packages = find_packages(exclude=['dopy.tests', 'dopy.tests.*'])
+     , description = 'Cmdpy is a library to take the rote scutwork out of writing commandline tools in python'
+     , name = 'cmdpy'
+     , packages = find_packages(exclude=['cmdpy.tests', 'cmdpy.tests.*'])
      , py_modules = []
-     , url = 'http://github.com/pjz/dopy'
+     , url = 'http://github.com/pjz/cmdpy'
      , version = version
      , zip_safe = False
       )
