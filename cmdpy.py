@@ -12,7 +12,7 @@ debug = debug_noop
 
 UsageError = SyntaxError
 
-class cmdfile_client(object):
+class CmdfileClient(object):
     """
         A wrapper class to turn a module with some functions into a commandline program.
 
@@ -124,12 +124,16 @@ class cmdfile_client(object):
 
 
 if __name__=='__main__':
+    """
+    python -m cmdpy <cmdfile> can be used manually on a cmdfile, or, more likely,
+    you can write a cmdfile and put '#!python -m cmdpy' at the top
+    """
     args = sys.argv
     if len(args) < 1:
         print("Usage:\ncmdpy <cmdfile>      - list all the commands in cmdfile")
         sys.exit(1)
     cmdfilename = args[1]
     cmdfileargs = args[2:]
-    cmdfile = cmdfile_client(cmdfilename)
+    cmdfile = CmdfileClient(cmdfilename)
     cmdfile.execute(cmdfileargs)
 
