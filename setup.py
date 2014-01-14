@@ -8,7 +8,7 @@ version = open('version.txt').read()
 classifiers = [ 'Development Status :: 4 - Beta'
               , 'Environment :: Console'
               , 'Intended Audience :: Developers'
-              , 'License :: OSI Approved :: MIT'
+              , 'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)'
               , 'Natural Language :: English'
               , 'Operating System :: MacOS :: MacOS X'
               , 'Operating System :: Microsoft :: Windows'
@@ -23,8 +23,7 @@ setup( author = 'Paul Jimenez'
      , classifiers = classifiers
      , description = 'Cmdpy is a library to take the rote scutwork out of writing commandline tools in python'
      , name = 'cmdpy'
-     , packages = find_packages(exclude=['cmdpy.tests', 'cmdpy.tests.*'])
-     , py_modules = []
+     , py_modules = [ 'distribute_setup', 'cmdpy' ]
      , url = 'http://github.com/pjz/cmdpy'
      , version = version
      , zip_safe = False

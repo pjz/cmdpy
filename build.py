@@ -88,17 +88,26 @@ def release():
         sys.exit(1)
 
     rel = main.options.release
+
+    from subprocess import check_output
+   
+    if rel in check_output(['git', 'tag', '-l'],universal_newlines=True).split('\n'):
+        print("Version %s is already git tagged." % rel)
+        sys.exit(1)
+
     _require_y("Release version %s ?" % rel)
 
     open("version.txt", "w").write(rel)
     run(main.options.python, 'setup.py', 'sdist', '--formats=zip,gztar,bztar', 'upload')
-    run(main.options.python, 'setup.py', 'bdist_wheel', 'upload')
-    shell('git', 'commit', 'version.txt', '-m', '"Release %s"' % rel) 
-    shell('git', 'tag', rel)
+    #run(main.options.python, 'setup.py', 'bdist_wheel', 'upload')
+    shell('git', 'commit', 'version.txt', '-m', 'Release %s' % rel, silent=False) 
+    shell('git', 'tag', rel, silent=False)
     open("version.txt", "a").write('-dev')
-    shell('git', 'commit', 'version.txt', '-m', '"Bump to %s-dev"' % rel) 
-    shell('git', 'push', '--tags', 'master')
+    shell('git', 'commit', 'version.txt', '-m', 'Bump to %s-dev' % rel, silent=False) 
+    shell('git', 'push', silent=False)
+    shell('git', 'push', '--tags', silent=False)
     clean_build()
+    print("Released!")
 
 def show_targets():
     print("""Valid targets:
