@@ -3,6 +3,7 @@ import sys
 import os.path
 from optparse import make_option
 from fabricate import main, run, shell, autoclean
+from subprocess import check_output
 
 # Core Executables
 # ================
@@ -13,20 +14,20 @@ RUN_DEPS = [ ]
 
 TEST_DEPS = [ 'coverage', 'pytest' ]
 
+
 def _virt(cmd, envdir='env'):
     return os.path.join(envdir, 'bin', cmd)
 
 ENV_ARGS = [
-            './vendor/virtualenv-1.7.1.2.py',
+            'virtualenv',
             '--distribute',
             '--unzip-setuptools',
             '--prompt=[%s] ' % name,
-            '--extra-search-dir=./vendor/',
             ]
 
 def dev():
     if os.path.exists('env'): return
-    args = [ main.options.python ] + ENV_ARGS + [ 'env' ]
+    args = ENV_ARGS + [ 'env' ]
     run(*args)
 
     for dep in RUN_DEPS + TEST_DEPS:
@@ -89,7 +90,6 @@ def release():
 
     rel = main.options.release
 
-    from subprocess import check_output
    
     if rel in check_output(['git', 'tag', '-l'],universal_newlines=True).split('\n'):
         print("Version %s is already git tagged." % rel)
