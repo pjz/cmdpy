@@ -2,8 +2,6 @@ from distribute_setup import use_setuptools
 use_setuptools()
 
 from setuptools import find_packages, setup
-version = open('version.txt').read()
-
 
 classifiers = [ 'Development Status :: 4 - Beta'
               , 'Environment :: Console'
@@ -24,9 +22,9 @@ setup( author = 'Paul Jimenez'
      , description = 'Cmdpy is a library to take the rote scutwork out of writing commandline tools in python'
      , name = 'cmdpy'
      , py_modules = [ 'distribute_setup', 'cmdpy' ]
-     , data_files=[('', ['version.txt'])]
      , url = 'http://github.com/pjz/cmdpy'
-     , version = version
+     # there must be nothing on the following line after the = other than a string constant 
+     , version = '1.3-dev'
      , zip_safe = False
       )
 
