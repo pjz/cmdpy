@@ -24,7 +24,7 @@ setup( author = 'Paul Jimenez'
      , py_modules = [ 'distribute_setup', 'cmdpy' ]
      , url = 'http://github.com/pjz/cmdpy'
      # there must be nothing on the following line after the = other than a string constant 
-     , version = '1.4'
+     , version = '1.4-dev'
      , zip_safe = False
       )
 
